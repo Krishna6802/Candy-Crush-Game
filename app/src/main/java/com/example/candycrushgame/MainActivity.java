@@ -2,12 +2,16 @@ package com.example.candycrushgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     int widthOfBlock, noOfBlocks=8, widthOfScreen;
     ArrayList<ImageView> candy = new ArrayList<>();
     int candyToBeDragged, candyToBeReplaced;
+    int notCandy=R.drawable.ic_launcher_background;
+    Handler handler;
+    int interval = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +79,50 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+        handler = new Handler();
+        startRepeat();
+    }
+
+    private void checkRowForThree() {
+        for(int i=0; i<62; i++)
+        {
+            int chosedCandy = (int)candy.get(i).getTag();
+            boolean isBlank = (int)candy.get(i).getTag() == notCandy;
+            Integer[] notValid = {6,7,14,15,22,23,30,31,38,39,46,47,54,55};
+            List<Integer> list = Arrays.asList(notValid);
+            if(!list.contains(i))
+            {
+                int x = i;
+                if((int)candy.get(x++).getTag() == chosedCandy && (int)candy.get(x).getTag() == chosedCandy)
+                {
+                    candy.get(x).setImageResource(notCandy);
+                    candy.get(x).setTag(notCandy);
+                    x--;
+                    candy.get(x).setImageResource(notCandy);
+                    candy.get(x).setTag(notCandy);
+                    x--;
+                    candy.get(x).setImageResource(notCandy);
+                    candy.get(x).setTag(notCandy);
+                }
+            }
+        }
+    }
+
+    Runnable repeatChecker = new Runnable() {
+        @Override
+        public void run() {
+            try{
+                checkRowForThree();
+            }
+            finally {
+                handler.postDelayed(repeatChecker,interval);
+            }
+        }
+    };
+
+    void startRepeat()
+    {
+        repeatChecker.run();
     }
 
     private void candyInterChange(){
