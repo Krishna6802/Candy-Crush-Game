@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,11 +31,14 @@ public class MainActivity extends AppCompatActivity {
     int notCandy=R.drawable.ic_launcher_background;
     Handler handler;
     int interval = 100;
+    TextView txtScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        txtScore = findViewById(R.id.txtScore);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -86,14 +90,15 @@ public class MainActivity extends AppCompatActivity {
     private void checkRowForThree() {
         for(int i=0; i<62; i++)
         {
-            int chosedCandy = (int)candy.get(i).getTag();
+            int choosedCandy = (int)candy.get(i).getTag();
             boolean isBlank = (int)candy.get(i).getTag() == notCandy;
             Integer[] notValid = {6,7,14,15,22,23,30,31,38,39,46,47,54,55};
             List<Integer> list = Arrays.asList(notValid);
             if(!list.contains(i))
             {
                 int x = i;
-                if((int)candy.get(x++).getTag() == chosedCandy && (int)candy.get(x).getTag() == chosedCandy)
+                if((int)candy.get(x++).getTag() == choosedCandy && !isBlank && (int)candy.get(x++).getTag() == choosedCandy
+                        && (int)candy.get(x).getTag() == choosedCandy)
                 {
                     candy.get(x).setImageResource(notCandy);
                     candy.get(x).setTag(notCandy);
@@ -108,11 +113,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void checkColumnForThree() {
+        for(int i=0; i<47; i++)
+        {
+            int choosedCandy = (int)candy.get(i).getTag();
+            boolean isBlank = (int)candy.get(i).getTag() == notCandy;
+
+            int x = i;
+            if((int)candy.get(x).getTag() == choosedCandy && !isBlank && (int)candy.get(x+noOfBlocks).getTag() == choosedCandy
+                    && (int)candy.get(x+2*noOfBlocks).getTag() == choosedCandy)
+            {
+                candy.get(x).setImageResource(notCandy);
+                candy.get(x).setTag(notCandy);
+                x+=noOfBlocks;
+                candy.get(x).setImageResource(notCandy);
+                candy.get(x).setTag(notCandy);
+                x+=noOfBlocks;
+                candy.get(x).setImageResource(notCandy);
+                candy.get(x).setTag(notCandy);
+            }
+        }
+    }
+
     Runnable repeatChecker = new Runnable() {
         @Override
         public void run() {
             try{
                 checkRowForThree();
+                checkColumnForThree();
             }
             finally {
                 handler.postDelayed(repeatChecker,interval);
