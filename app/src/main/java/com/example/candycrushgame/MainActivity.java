@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        moveDownCandies();
     }
 
     private void checkColumnForThree() {
@@ -131,6 +132,22 @@ public class MainActivity extends AppCompatActivity {
                 x+=noOfBlocks;
                 candy.get(x).setImageResource(notCandy);
                 candy.get(x).setTag(notCandy);
+            }
+        }
+        moveDownCandies();
+    }
+
+    private void moveDownCandies()
+    {
+        Integer[] firstRow = {0,1,2,3,4,5,6,7};
+        List<Integer> list = Arrays.asList(firstRow);
+        for(int i=55; i>=0; i--)
+        {
+            if(candy.get(i+noOfBlocks).getTag()==notCandy)
+            {
+                candy.get(i+noOfBlocks).setImageResource((int)candy.get(i).getTag());
+                candy.get(i+noOfBlocks).setTag((int)candy.get(i).getTag());
+                candy.get(i).setTag(notCandy);
             }
         }
     }
