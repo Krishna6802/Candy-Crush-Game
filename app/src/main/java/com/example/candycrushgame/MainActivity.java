@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
     int interval = 100;
     TextView txtScore;
+    int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
                 if((int)candy.get(x++).getTag() == choosedCandy && !isBlank && (int)candy.get(x++).getTag() == choosedCandy
                         && (int)candy.get(x).getTag() == choosedCandy)
                 {
+                    score = score + 3;
+                    txtScore.setText(String.valueOf(score));
+
                     candy.get(x).setImageResource(notCandy);
                     candy.get(x).setTag(notCandy);
                     x--;
@@ -124,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
             if((int)candy.get(x).getTag() == choosedCandy && !isBlank && (int)candy.get(x+noOfBlocks).getTag() == choosedCandy
                     && (int)candy.get(x+2*noOfBlocks).getTag() == choosedCandy)
             {
+                score = score + 3;
+                txtScore.setText(String.valueOf(score));
                 candy.get(x).setImageResource(notCandy);
                 candy.get(x).setTag(notCandy);
                 x+=noOfBlocks;
@@ -143,11 +149,28 @@ public class MainActivity extends AppCompatActivity {
         List<Integer> list = Arrays.asList(firstRow);
         for(int i=55; i>=0; i--)
         {
-            if(candy.get(i+noOfBlocks).getTag()==notCandy)
+            if((int) candy.get(i+noOfBlocks).getTag() == notCandy)
             {
                 candy.get(i+noOfBlocks).setImageResource((int)candy.get(i).getTag());
                 candy.get(i+noOfBlocks).setTag((int)candy.get(i).getTag());
+                candy.get(i).setImageResource(notCandy);
                 candy.get(i).setTag(notCandy);
+
+                if(list.contains(i) && (int) candy.get(i).getTag() == notCandy)
+                {
+                    int randomColor = (int) Math.floor(Math.random() * candies.length);
+                    candy.get(i).setImageResource(candies[randomColor]);
+                    candy.get(i).setTag(candies[randomColor]);
+                }
+            }
+        }
+        for (int i=0; i<8; i++)
+        {
+            if ((int) candy.get(i).getTag() == notCandy)
+            {
+                int randomColor = (int) Math.floor(Math.random() * candies.length);
+                candy.get(i).setImageResource(candies[randomColor]);
+                candy.get(i).setTag(candies[randomColor]);
             }
         }
     }
