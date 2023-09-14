@@ -89,29 +89,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkRowForThree() {
-        for(int i=0; i<62; i++)
-        {
-            int choosedCandy = (int)candy.get(i).getTag();
-            boolean isBlank = (int)candy.get(i).getTag() == notCandy;
-            Integer[] notValid = {6,7,14,15,22,23,30,31,38,39,46,47,54,55};
+        for (int i = 0; i < 62; i++) {
+            int choosedCandy = (int) candy.get(i).getTag();
+            boolean isBlank = (int) candy.get(i).getTag() == notCandy;
+            Integer[] notValid = {6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55};
             List<Integer> list = Arrays.asList(notValid);
-            if(!list.contains(i))
-            {
+            if (!list.contains(i)) {
                 int x = i;
-                if((int)candy.get(x++).getTag() == choosedCandy && !isBlank && (int)candy.get(x++).getTag() == choosedCandy
-                        && (int)candy.get(x).getTag() == choosedCandy)
-                {
-                    score = score + 3;
+                int count = 1; // Initialize count to 1 since we already have one candy at index i
+
+                // Check the next candies for the same type and increment count
+                while (x < 61 && (int) candy.get(x + 1).getTag() == choosedCandy && !isBlank) {
+                    count++;
+                    x++;
+                }
+
+                // If we have 3 or more candies of the same type in a row, update the score
+                if (count >= 3) {
+                    score += count; // Increment the score based on the number of candies matched
                     txtScore.setText(String.valueOf(score));
 
-                    candy.get(x).setImageResource(notCandy);
-                    candy.get(x).setTag(notCandy);
-                    x--;
-                    candy.get(x).setImageResource(notCandy);
-                    candy.get(x).setTag(notCandy);
-                    x--;
-                    candy.get(x).setImageResource(notCandy);
-                    candy.get(x).setTag(notCandy);
+                    // Set image resource and tag for the matched candies to notCandy
+                    for (int j = i; j <= x; j++) {
+                        candy.get(j).setImageResource(notCandy);
+                        candy.get(j).setTag(notCandy);
+                    }
                 }
             }
         }
