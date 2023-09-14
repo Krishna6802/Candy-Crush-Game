@@ -98,18 +98,15 @@ public class MainActivity extends AppCompatActivity {
                 int x = i;
                 int count = 1; // Initialize count to 1 since we already have one candy at index i
 
-                // Check the next candies for the same type and increment count
                 while (x < 61 && (int) candy.get(x + 1).getTag() == choosedCandy && !isBlank) {
                     count++;
                     x++;
                 }
 
-                // If we have 3 or more candies of the same type in a row, update the score
                 if (count >= 3) {
-                    score += count; // Increment the score based on the number of candies matched
+                    score += count;
                     txtScore.setText(String.valueOf(score));
 
-                    // Set image resource and tag for the matched candies to notCandy
                     for (int j = i; j <= x; j++) {
                         candy.get(j).setImageResource(notCandy);
                         candy.get(j).setTag(notCandy);
